@@ -1,5 +1,6 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import ApexCharts, { ApexOptions } from 'apexcharts';
 
 @Component({
   selector: 'app-poll-vote',
@@ -7,7 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./poll-vote.component.scss']
 })
 export class PollVoteComponent implements OnInit {
-  options = ['Monday','Tuesday', 'Wednesday']
+  @Input() voted: boolean
+  @Input() options: string[]
+  @Input() results: number[]
+  @Input() question: string
+
+  // options = ['Monday','Tuesday', 'Wednesday']
   voteForm: FormGroup
 
   constructor(private fb: FormBuilder) {
@@ -17,9 +23,40 @@ export class PollVoteComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.voted) {
+      this.generateChart()
+    }
   }
 
   submitForm() {
     console.log(this.voteForm.value)
+  }
+
+  generateChart() {
+    const options: ApexOptions = {
+      series: [
+        {
+          data: this.results
+        }
+      ],
+      chart: {
+        height: 350,
+        type: 'bar'
+      },
+      plotOptions: {
+        bar: {
+          columnWidth: '45%',
+          distributed: true
+        }
+      },
+      legend: {
+        show: false
+      },
+      xaxis: {
+        categories: this.options
+      }
+    }
+    const chart = new ApexCharts(document.querySelector('#poll-results'), options)
+    chart.render()
   }
 }
