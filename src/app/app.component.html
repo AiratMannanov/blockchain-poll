@@ -10,7 +10,7 @@
   </p>
 </section>
 
-<app-poll-create *ngIf="showForm"></app-poll-create>
+<app-poll-create *ngIf="showForm" (pollCreated)="handlePollCreate($event)"></app-poll-create>
 
 <div class="d-flex">
   <div class="container poll-list">
@@ -24,7 +24,9 @@
   </div>
   <div class="container poll-detail">
     <app-poll-vote
+      (pollVoted)="handlePollVote($event)"
       *ngIf="activePoll"
+      [id]="activePoll.id"
       [voted]="activePoll.voted"
       [question]="activePoll.question"
       [results]="activePoll.results"
