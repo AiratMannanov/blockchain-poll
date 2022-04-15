@@ -9,12 +9,11 @@ import { fromAscii, toAscii } from 'web3-utils'
 })
 export class PollService {
   constructor(private web3: Web3Service) { }
-  // constructor() {}
 
   async getPolls(): Promise<Poll[]> {
     const polls: Poll[] = []
     const totalPolls = await this.web3.call('getTotalPolls')
-    const acc = await await this.web3.getAccount()
+    const acc = await this.web3.getAccount()
     const voter = await this.web3.call('getVoter', acc)
     const voterNormalized = this.normalizeVoter(voter)
 
